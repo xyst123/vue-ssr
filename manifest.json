@@ -1,0 +1,13 @@
+{
+  "name": "vue-ssr",
+  "short_name": "vue-ssr",
+  "icons": [{
+    "src": "/static/images/favicon.png",
+    "sizes": "120x120",
+    "type": "image/png"
+  }],
+  "start_url": "/",
+  "background_color": "#f2f3f5",
+  "display": "standalone",
+  "theme_color": "#f60"
+}

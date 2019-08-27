@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <title>{{ title }}</title>
+  <meta charset="utf-8">
+  <!-- 显示默认的苹果工具栏和菜单栏 -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <!-- 显示默认的苹果工具栏和菜单栏 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <!-- 苹果设备状态栏背景色 -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <!-- 苹果设备添加到主屏幕的图标 -->
+  <link rel="apple-touch-icon" sizes="120x120" href="/static/images/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+  <!-- favicon -->
+  <link rel="shortcut icon" sizes="48x48" href="/static/images/favicon.png">
+  <!-- 选项卡颜色 -->
+  <meta name="theme-color" content="#f60">
+  <link rel="preload" href="/static/js/performance.js" as="script">
+  <link rel="preload" href="http://39d0825d09f05.cdn.sohucs.com/sdk/passport-4.0.6.js" as="script">
+  <link rel="preload" href="//statics.itc.cn/spm/prod/js/1.0.1/index.js" as="script">
+  <meta name="data-spm" content="{{ aCode }}">
+  <!-- 应用的配置文件，用于指定应用的名称、图标、权限等 -->
+  <link rel="manifest" href="/manifest.json">
+  <style>
+
+  </style>
+</head>
+
+<body data-spm="{{ bCode }}">
+  <script type="text/javascript" src="/static/js/performance.js"></script>
+  <script defer type="text/javascript" src="http://39d0825d09f05.cdn.sohucs.com/sdk/passport-4.0.6.js"></script>
+  <!--vue-ssr-outlet-->
+  <script id="track" type="text/javascript" src="//statics.itc.cn/spm/prod/js/1.0.1/index.js"></script>
+</body>
+
+</html>
