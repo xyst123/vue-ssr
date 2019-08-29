@@ -1,6 +1,8 @@
 const fs = require('fs');
 // 服务端缓存
 // const LRU = require('lru-cache');
+const https = require('https');
+const http = require('http');
 const express = require('express');
 // 设置浏览器tab小图标
 const favicon = require('serve-favicon');
@@ -115,6 +117,20 @@ app.get('*', env === 'dev' ? (req, res) => {
 } : render);
 
 const { port } = serverConfig;
-app.listen(port, () => {
-  console.log(`server started at localhost:${port}`);
-});
+if (serverConfig.protocol === 'https') {
+  const httpsOptions = {
+    key: fs.readFileSync(resolve('server.key')),
+    cert: fs.readFileSync(resolve('server.crt')),
+  };
+  const httpsServer = https.createServer(httpsOptions, app);
+
+  httpsServer.listen(port, () => {
+    console.log(`server started at localhost:${port}`);
+  });
+} else {
+  const httpServer = http.createServer(app);
+
+  httpServer.listen(port, () => {
+    console.log(`server started at localhost:${port}`);
+  });
+}

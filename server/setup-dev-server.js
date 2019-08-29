@@ -4,6 +4,7 @@ const MFS = require('memory-fs');
 const webpack = require('webpack');
 // 监听文件变化
 const chokidar = require('chokidar');
+const opn = require('opn');
 const webpackClientConfig = require('../build/webpack.client.config');
 const webpackServerConfig = require('../build/webpack.server.config');
 const { iterateObject } = require('../utils');
@@ -97,6 +98,12 @@ module.exports = function setupDevServer({
   }
   if (serverConfig.enableMock) {
     iterateMock(mockRootDir);
+  }
+
+  if (serverConfig.autoOpen) {
+    devMiddleware.waitUntilValid(() => {
+      opn(`http://localhost:${serverConfig.port}`);
+    });
   }
 
   app.use(devMiddleware);

@@ -10,9 +10,11 @@ module.exports = {
     ],
   },
   server: {
-    port: 3338,
+    protocol: 'http',
+    port: 3340,
     enableStaticCache: false,
     enableMock: false,
+    autoOpen: true,
     proxy: {
       '/wrj': {
         target: 'http://wrj.sohu.com',

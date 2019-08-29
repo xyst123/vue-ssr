@@ -1,6 +1,7 @@
 <template>
   <div class="main">
     <h3 class="env" @click="log">当前环境：{{env}}</h3>
+    <button @click="getImages">换一批图片</button>
     <ul class="image-list">
       <li class="image-item" v-for="image in images" :key="`${image.aid}`">
         <img :src="image.cover" alt />
@@ -12,6 +13,7 @@
 <script>
 import { request } from "../utils";
 import mainModule from "../store/modules/main";
+let page = 1;
 export default {
   name: "Main",
   data() {
@@ -21,12 +23,7 @@ export default {
   },
   // 此函数会在组件实例化之前调用，所以它无法访问this，需要将store和路由信息作为参数传递进去
   asyncData({ store, route }) {
-    store.registerModule("main", mainModule);
-    return store.dispatch("getImages", 1);
-  },
-  // 多次访问路由时，避免在客户端重复注册模块
-  destroyed() {
-    this.$store.unregisterModule("main");
+    return store.dispatch("getImages", page);
   },
   computed: {
     images() {
@@ -41,6 +38,10 @@ export default {
   methods: {
     log() {
       throw new Error("error");
+    },
+    getImages() {
+      page += 1;
+      this.$store.dispatch("getImages", page);
     }
   }
 };

@@ -10,6 +10,7 @@ module.exports = {
     ],
   },
   server: {
+    protocol: 'http',
     port: 3338,
     enableStaticCache: true,
     proxy: {
