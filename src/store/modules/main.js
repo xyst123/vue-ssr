@@ -1,4 +1,4 @@
-import { request } from '../../utils';
+import { requestProxy } from '../../utils';
 
 export default {
   // state必须是一个函数
@@ -7,15 +7,14 @@ export default {
   }),
   actions: {
     getImages({ commit }, pageNumber) {
-      return request({
+      return requestProxy({
         url: '/wrj/v1/show/2019/picAll',
         data: {
           page: pageNumber,
           size: 15,
-          time: Date.now(),
         },
-      }).then((images) => {
-        commit('setImages', images.data);
+      }, (data) => {
+        commit('setImages', data.data);
       });
     },
   },

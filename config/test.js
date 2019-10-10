@@ -11,7 +11,7 @@ module.exports = {
   },
   server: {
     protocol: 'http',
-    port: 3338,
+    port: 3351,
     enableStaticCache: true,
     proxy: {
       '/wrj': {

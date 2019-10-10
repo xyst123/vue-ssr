@@ -4,15 +4,17 @@
   "description": "",
   "scripts": {
     "dev": "cross-env NODE_ENV=dev node server",
+
     "client:test": "cross-env NODE_ENV=test webpack --config build/webpack.client.config.js --progress --hide-modules",
     "server:test": "cross-env NODE_ENV=test webpack --config build/webpack.server.config.js --progress --hide-modules",
     "build:test": "rimraf dist && npm run client:test && npm run server:test",
-    "start:test": "cross-env NODE_ENV=test pm2 server",
+    "start:test": "cross-env NODE_ENV=test pm2 start server",
     "test": "npm run build:test && npm run start:test",
+
     "client:prod": "cross-env NODE_ENV=prod webpack --config build/webpack.client.config.js --progress --hide-modules",
     "server:prod": "cross-env NODE_ENV=prod webpack --config build/webpack.server.config.js --progress --hide-modules",
     "build:prod": "rimraf dist && npm run client:prod && npm run server:prod",
-    "start:prod": "cross-env NODE_ENV=prod pm2 server",
+    "start:prod": "cross-env NODE_ENV=prod pm2 start server",
     "prod": "npm run build:prod && npm run start:prod"
   },
   "engines": {

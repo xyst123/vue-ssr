@@ -11,7 +11,7 @@ module.exports = {
   },
   server: {
     protocol: 'http',
-    port: 3340,
+    port: 3350,
     enableStaticCache: false,
     enableMock: false,
     autoOpen: true,
