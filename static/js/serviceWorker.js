@@ -1,15 +1,17 @@
-const CacheName = 'v2';
-const CacheFiles = [
+const FileCacheName = 'file-v1';
+const ApiCacheName = 'api-v1';
+
+const cacheFiles = [
   '/main',
+  '/manifest.json',
   '/static/images/favicon.png',
   '/static/js/performance.js',
   'http://statics.itc.cn/spm/prod/js/1.0.1/index.js',
   'http://39d0825d09f05.cdn.sohucs.com/sdk/passport-4.0.6.js',
 ];
-
 self.addEventListener('install', (e) => {
   e.waitUntil(
-    caches.open(CacheName).then(cache => cache.addAll(CacheFiles)),
+    caches.open(FileCacheName).then(cache => cache.addAll(cacheFiles)),
   );
 });
 
@@ -18,7 +20,7 @@ self.addEventListener('activate', (e) => {
     caches.keys().then((cacheNames) => {
       Promise.all(
         cacheNames.map((cacheName) => {
-          if (cacheName !== CacheName) {
+          if ((cacheName.startsWith('file-') && cacheName !== FileCacheName) || (cacheName.startsWith('api-') && cacheName !== ApiCacheName)) {
             // 清除过期的缓存资源
             return caches.delete(cacheName);
           }
@@ -37,7 +39,7 @@ self.addEventListener('fetch', (e) => {
 
   if (shouldCache) {
     // 处理接口
-    caches.open(CacheName).then(cache => fetch(e.request).then((response) => {
+    caches.open(ApiCacheName).then(cache => fetch(e.request).then((response) => {
       // 将接口返回结果添加到cache
       cache.put(e.request.url, response.clone());
       return response;
@@ -46,10 +48,43 @@ self.addEventListener('fetch', (e) => {
     // 处理静态资源
     // 命中cache则不发起请求直接使用cache，否则发起请求
     e.respondWith(
-      caches.match(e.request).then(cache => cache || fetch(e.request)).catch((error) => {
-        console.error(error);
-        return fetch(e.request);
-      }),
+      caches.match(e.request).then(cache => cache || fetch(e.request)).catch(() => {
+        if (/\.png|jpeg|jpg|gif/i.test(e.request.url)) {
+          return caches.match('/static/images/favicon.png').then(cache => cache)
+        }
+        return
+      })
     );
   }
+});
+
+self.addEventListener('push', (e) => {
+  const { data } = e;
+  if (data) {
+    const realData = JSON.parse(data.text());
+    self.registration.showNotification(realData.title, realData.options);
+  }
+});
+
+self.addEventListener('notificationclick', (e) => {
+  e.notification.close();
+  const { action } = e;
+  e.waitUntil(
+    self.clients.matchAll().then((clients) => {
+      if (!clients || clients.length === 0) {
+        // 如果页面没打开则打开页面
+        if (self.clients.openWindow) {
+          self.clients.openWindow('http://127.0.0.1:3350/main');
+        }
+        return;
+      }
+      // 如果页面已打开则切换到页面
+      if (clients[0].focus) {
+        clients[0].focus();
+      }
+      clients.forEach((client) => {
+        client.postMessage(action);
+      });
+    }),
+  );
 });

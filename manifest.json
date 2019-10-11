@@ -8,6 +8,8 @@
   }],
   "start_url": "/",
   "background_color": "#f2f3f5",
+  "theme_color": "#f60",
+  "orientation": "portrait-primary",
   "display": "standalone",
-  "theme_color": "#f60"
+  "description": "vue-ssr"
 }

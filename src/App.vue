@@ -15,7 +15,12 @@ export default {
   data() {
     return {
       env: process.env.NODE_ENV,
-      status: "on-line"
+      status:
+        process.env.VUE_ENV === "client"
+          ? window.navigator.onLine
+            ? "on-line"
+            : "off-line"
+          : "on-line"
     };
   },
   created() {

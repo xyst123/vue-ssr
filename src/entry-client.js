@@ -2,6 +2,7 @@ import Vue from 'vue';
 import 'es6-promise/auto';
 import { createApp } from './app';
 import pageConfig from './config/page';
+import { base64ToUint8Array, request } from './utils';
 
 Vue.mixin({
   beforeRouteUpdate(to, from, next) {
@@ -66,10 +67,81 @@ router.afterEach((to) => {
 });
 
 // service worker
+function requestPermission() {
+  return new Promise((resolve, reject) => {
+    const permissionPromise = Notification.requestPermission((result) => {
+      resolve(result);
+    });
+    if (permissionPromise) {
+      permissionPromise.then(resolve, reject);
+    }
+  }).then((result) => {
+    if (result !== 'granted') {
+      throw new Error('用户拒绝接收通知');
+    }
+  });
+}
+
+function subscribeUserToPush(registration, publicKey) {
+  const subscribeOptions = {
+    userVisibleOnly: true,
+    applicationServerKey: base64ToUint8Array(publicKey),
+  };
+  return registration.pushManager.subscribe(subscribeOptions).then((pushSubscription) => {
+    console.log('订阅推送成功：', JSON.stringify(pushSubscription));
+    return pushSubscription;
+  });
+}
+
 if ((window.location.protocol === 'https:' || window.location.hostname === 'localhost') && window.navigator.serviceWorker) {
-  window.navigator.serviceWorker.register('/serviceWorker.js').then((registration) => {
-    console.log('service worker注册成功', registration);
-  }).catch((error) => {
-    console.error('service worker注册失败', error);
+  const publicKey = 'BOEQSjdhorIf8M0XFNlwohK3sTzO9iJwvbYU-fuXRF0tvRpPPMGO6d_gJC_pUQwBT7wD8rKutpNTFHOHN3VqJ0A';
+  window.navigator.serviceWorker.register('/serviceWorker.js')
+    .then(registration => Promise.all([
+      registration,
+      requestPermission(),
+      subscribeUserToPush(registration, publicKey),
+    ])).then((result) => {
+      const registration = result[0];
+      const title = '欢迎来到vue-ssr';
+      const options = {
+        body: '加油哦',
+        icon: '/static/images/favicon.png',
+        actions: [{
+          action: 'show-note',
+          title: '查看笔记',
+        }, {
+          action: 'contact-me',
+          title: '联系我',
+        }],
+        tag: 'welcome',
+        renotify: true,
+      };
+      registration.showNotification(title, options);
+
+      const subscription = result[2];
+      request({
+        method: 'POST',
+        url: '/push/set',
+        data: {
+          id: Date.now(),
+          subscription,
+        },
+      });
+    }).catch((error) => {
+      console.error(error);
+    });
+
+  navigator.serviceWorker.addEventListener('message', (e) => {
+    const { data } = e;
+    switch (data) {
+      case 'show-note':
+        window.open('https://github.com/xyst123/codes');
+        break;
+      case 'contact-me':
+        window.location.href = 'mailto:2273136383@qq.com';
+        break;
+      default:
+        console.log('没有匹配的消息处理器');
+    }
   });
 }

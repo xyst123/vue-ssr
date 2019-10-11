@@ -4,6 +4,7 @@ const fs = require('fs');
 const https = require('https');
 const http = require('http');
 const express = require('express');
+const bodyParser = require('body-parser');
 // 设置浏览器tab小图标
 const favicon = require('serve-favicon');
 const compression = require('compression');
@@ -38,7 +39,9 @@ if (!serverConfig.enableMock) {
 }
 
 // 使用自定义接口
+app.use(bodyParser.json());
 app.use('/utils', require('./routes/utils'));
+app.use('/push', require('./routes/push'));
 
 function createRenderer(bundle, options) {
   return createBundleRenderer(bundle, Object.assign(options, {
