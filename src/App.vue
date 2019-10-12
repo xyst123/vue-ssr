@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <p>App</p>
     <h3 class="env" @click="log">当前环境：{{env}}</h3>
     <h3 class="status">当前状态：{{status}}</h3>
+    <button id="record-sync">同步</button>
     <transition name="fade" mode="out-in">
       <router-view />
     </transition>
@@ -46,6 +46,9 @@ export default {
   }
 };
 </script>
+<style lang="less">
+@import url(./style/reset.less);
+</style>
 <style lang="less" scoped>
 @import url(./style/global.less);
 .env {

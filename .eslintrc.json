@@ -6,7 +6,7 @@
   },
   "extends": "airbnb-base",
   "globals": {
-
+    "logger": true
   },
   "parserOptions": {
     "ecmaVersion": 2018

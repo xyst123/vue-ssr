@@ -50,10 +50,9 @@ self.addEventListener('fetch', (e) => {
     e.respondWith(
       caches.match(e.request).then(cache => cache || fetch(e.request)).catch(() => {
         if (/\.png|jpeg|jpg|gif/i.test(e.request.url)) {
-          return caches.match('/static/images/favicon.png').then(cache => cache)
+          return caches.match('/static/images/favicon.png').then(cache => cache);
         }
-        return
-      })
+      }),
     );
   }
 });
@@ -87,4 +86,49 @@ self.addEventListener('notificationclick', (e) => {
       });
     }),
   );
+});
+
+class EventController {
+  constructor() {
+    this.listeners = {};
+  }
+
+  once(tag, callback) {
+    this.listeners[tag] = this.listeners[tag] || [];
+    this.listeners[tag].push(callback);
+  }
+
+  trigger(tag, data) {
+    this.listeners[tag] = this.listeners[tag] || [];
+    let listener;
+    while (listener = this.listeners[tag].shift()) {
+      listener(data);
+    }
+  }
+}
+
+const eventController = new EventController();
+
+self.addEventListener('sync', (e) => {
+  if (e.tag === 'record-sync') {
+    const callbackPromise = new Promise((resolve) => {
+      eventController.once('record', (data) => {
+        resolve(data);
+      });
+      setTimeout(resolve, 15000);
+    });
+    e.waitUntil(
+      callbackPromise.then((data) => {
+        const ua = data && data.ua ? data.ua : '';
+        const request = new Request(`/sync/record?ua=${ua}`, { method: 'GET' });
+        return fetch(request);
+      }).then(response => response),
+    );
+  }
+});
+
+self.addEventListener('message', (e) => {
+  const realData = JSON.parse(e.data);
+  const { type, data } = realData;
+  eventController.trigger(type, data);
 });

@@ -11,7 +11,6 @@ const vapidKeys = {
 webPush.setVapidDetails('mailto:alienzhou16@163.com', vapidKeys.publicKey,
   vapidKeys.privateKey)
 
-
 function getSubscription(query) {
   return new Promise((resolve, reject) => {
     db.find(query, (error, list) => {
@@ -47,13 +46,13 @@ function removeSubscription(subscription) {
 }
 function pushMessage(subscription, data = "") {
   webPush.sendNotification(subscription, data).then(data => {
-    console.log('推送数据：', data);
+    logger.info('推送数据：', data);
     return;
   }).catch(error => {
     if (error.statusCode === 401 || error.statusCode === 404) {
       return removeSubscription(subscription);
     }
-    console.error(error);
+    logger.error(error);
   })
 }
 router.post('/emit', async (req, res) => {
@@ -70,6 +69,7 @@ router.post('/emit', async (req, res) => {
       message: list,
     });
   } catch (error) {
+    logger.error(error);
     res.json({
       code: -1,
       message: error,
@@ -106,6 +106,7 @@ router.post('/set', async (req, res) => {
       message: data,
     })
   } catch (error) {
+    logger.error(error);
     res.json({
       code: -1,
       message: error,

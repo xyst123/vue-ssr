@@ -40,6 +40,7 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+@import url(../style/global.less);
 .main {
   .image-list {
     .image-item {

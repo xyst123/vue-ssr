@@ -96,12 +96,9 @@ function subscribeUserToPush(registration, publicKey) {
 if ((window.location.protocol === 'https:' || window.location.hostname === 'localhost') && window.navigator.serviceWorker) {
   const publicKey = 'BOEQSjdhorIf8M0XFNlwohK3sTzO9iJwvbYU-fuXRF0tvRpPPMGO6d_gJC_pUQwBT7wD8rKutpNTFHOHN3VqJ0A';
   window.navigator.serviceWorker.register('/serviceWorker.js')
-    .then(registration => Promise.all([
-      registration,
-      requestPermission(),
-      subscribeUserToPush(registration, publicKey),
-    ])).then((result) => {
-      const registration = result[0];
+    .then((registration) => {
+      requestPermission();
+
       const title = '欢迎来到vue-ssr';
       const options = {
         body: '加油哦',
@@ -118,20 +115,35 @@ if ((window.location.protocol === 'https:' || window.location.hostname === 'loca
       };
       registration.showNotification(title, options);
 
-      const subscription = result[2];
-      request({
-        method: 'POST',
-        url: '/push/set',
-        data: {
-          id: Date.now(),
-          subscription,
-        },
+      subscribeUserToPush(registration, publicKey).then((subscription) => {
+        request({
+          method: 'POST',
+          url: '/push/set',
+          data: {
+            id: Date.now(),
+            subscription,
+          },
+        });
+      }).catch((error) => {
+        console.error('订阅消息推送失败', error);
       });
+
+      document.getElementById('record-sync').onclick = () => {
+        const tag = 'record-sync';
+        registration.sync.register(tag).then(() => {
+          console.log('后台同步触发成功', tag);
+          window.navigator.serviceWorker.controller.postMessage(
+            JSON.stringify({ type: 'record', data: { ua: window.navigator.userAgent } }),
+          );
+        }).catch((error) => {
+          console.error('后台同步触发失败', error);
+        });
+      };
     }).catch((error) => {
       console.error(error);
     });
 
-  navigator.serviceWorker.addEventListener('message', (e) => {
+  window.navigator.serviceWorker.addEventListener('message', (e) => {
     const { data } = e;
     switch (data) {
       case 'show-note':

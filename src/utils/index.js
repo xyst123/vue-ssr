@@ -77,7 +77,6 @@ export function requestProxy({
 
   return getDataFromCache(realUrl).then((cache) => {
     if (cache) {
-      // 临时使用缓存数据
       console.log('使用缓存数据');
       callback(cache);
     }
@@ -87,7 +86,6 @@ export function requestProxy({
     });
   }).then((res) => {
     if (res.code === 200 && JSON.stringify(res) !== JSON.stringify(cacheData)) {
-      // 使用接口返回数据
       console.log('使用接口返回数据');
       callback(res);
     }

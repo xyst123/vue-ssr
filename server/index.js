@@ -13,6 +13,7 @@ const proxy = require('http-proxy-middleware');
 const { createBundleRenderer } = require('vue-server-renderer');
 const serverInfo = `express/${require('express/package.json').version} `
   + `vue-server-renderer/${require('vue-server-renderer/package.json').version}`;
+require('./helpers/logger');
 const configs = require('../config');
 const { resolve, iterateObject } = require('../utils');
 
@@ -42,6 +43,7 @@ if (!serverConfig.enableMock) {
 app.use(bodyParser.json());
 app.use('/utils', require('./routes/utils'));
 app.use('/push', require('./routes/push'));
+app.use('/sync', require('./routes/sync'));
 
 function createRenderer(bundle, options) {
   return createBundleRenderer(bundle, Object.assign(options, {
@@ -60,7 +62,7 @@ let renderer;
 let readyPromise;
 const templatePath = resolve('src/index.template.html');
 if (env === 'dev') {
-  readyPromise = require('./setup-dev-server')({
+  readyPromise = require('./helpers/setup-dev-server')({
     app,
     templatePath,
     callback: (bundle, options) => {
@@ -90,8 +92,8 @@ function render(req, res) {
     } else {
       // Render Error Page or Redirect
       res.status(500).send('500 | Internal Server Error');
-      console.error(`error during render : ${req.url}`);
-      console.error(err.stack);
+      logger.error(`error during render : ${req.url}`);
+      logger.error(err.stack);
     }
   };
 
