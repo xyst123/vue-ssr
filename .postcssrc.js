@@ -1,9 +1,7 @@
 // https://github.com/michael-ciniawsky/postcss-load-config
 module.exports = {
   "plugins": {
-    "autoprefixer": {
-      browsers: require('./package.json').browserslist || []
-    },
+    "autoprefixer": {},
     'postcss-px-to-viewport': {
       viewportWidth: 750,
       viewportHeight: 1334,

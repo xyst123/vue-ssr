@@ -7,3 +7,6 @@ server/logs/
 *.key
 *.srl
 *.pem
+vendors-manifest.json
+vendors.dll.js
+vendors.dll.js.map

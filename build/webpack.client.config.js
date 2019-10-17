@@ -13,9 +13,7 @@ const config = merge(main, {
     app: './src/entry-client.js',
   },
   resolve: {
-    alias: {
-      'create-api': './create-api-client.js',
-    },
+
   },
   plugins: [
     new webpack.DefinePlugin({

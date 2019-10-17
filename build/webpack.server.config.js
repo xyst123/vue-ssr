@@ -17,9 +17,7 @@ const config = merge(main, {
     libraryTarget: 'commonjs2',
   },
   resolve: {
-    alias: {
-      'create-api': './create-api-server.js',
-    },
+
   },
   // 防止将某些import的包打包到bundle中，在运行时再去从外部获取这些扩展依赖
   externals: nodeExternals({

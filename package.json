@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "dll": "webpack --config build/webpack.dll.config.js",
     "dev": "cross-env NODE_ENV=dev node server",
     "client:test": "cross-env NODE_ENV=test webpack --config build/webpack.client.config.js --progress --hide-modules",
     "server:test": "cross-env NODE_ENV=test webpack --config build/webpack.server.config.js --progress --hide-modules",
@@ -34,6 +35,7 @@
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-plugin-import": "^2.18.2",
     "friendly-errors-webpack-plugin": "^1.7.0",
+    "happypack": "^5.0.1",
     "http-proxy-middleware": "^0.19.1",
     "less": "^3.9.0",
     "less-loader": "^5.0.0",
@@ -64,6 +66,7 @@
     "cross-env": "^5.2.0",
     "es6-promise": "^4.2.8",
     "express": "^4.17.1",
+    "helmet": "^3.21.1",
     "log4js": "^5.2.2",
     "lru-cache": "^5.1.1",
     "nedb": "^1.8.0",

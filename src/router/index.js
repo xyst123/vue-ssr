@@ -11,7 +11,8 @@ export function createRouter() {
       {
         path: '/main',
         name: 'Main',
-        component: () => import('../views/Main.vue'), meta: {
+        component: () => import('../views/Main.vue'),
+        meta: {
           title: 'main',
           bCode: 'main'
         }
@@ -23,7 +24,7 @@ export function createRouter() {
         meta: {
           title: 'sub',
           bCode: 'sub',
-          permissions:['master'] 
+          permissions: ['master']
         },
       },
       { path: '/', redirect: '/main' },

@@ -4,6 +4,7 @@ const fs = require('fs');
 const https = require('https');
 const http = require('http');
 const express = require('express');
+const helmet = require('helmet');
 const bodyParser = require('body-parser');
 // 设置浏览器tab小图标
 const favicon = require('serve-favicon');
@@ -25,6 +26,8 @@ const app = express();
 const serve = (sourcePath, cache) => express.static(resolve(sourcePath), {
   maxAge: cache && serverConfig.enableStaticCache ? 1000 * 60 * 60 * 24 * 30 : 0,
 });
+// 添加安全相关HTTP头部
+app.use(helmet());
 app.use(compression({ threshold: 0 }));
 app.use(favicon('./server/static/images/favicon.png'));
 app.use('/dist', serve('dist', true));
