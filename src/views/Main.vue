@@ -1,5 +1,6 @@
 <template>
   <div class="main">
+    <button @click="$router.push('/sub')">跳转</button>
     <button @click="getImages">换一批图片</button>
     <ul class="image-list">
       <li class="image-item" v-for="image in images" :key="`${image.aid}`">

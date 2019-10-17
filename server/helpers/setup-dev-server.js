@@ -57,7 +57,7 @@ module.exports = function setupDevServer({
   const hotMiddleware = require('webpack-hot-middleware')(clientCompiler, { heartbeat: 5000 });
 
   // 监听mock数据变化并实时更新
-  const mockRootDir = path.resolve(__dirname, '../mock');
+  const mockRootDir = path.resolve(__dirname, './mock');
   function iterateMock(currentDir) {
     fs.readdirSync(currentDir).forEach((file) => {
       if (file.indexOf('.') === 0) return;

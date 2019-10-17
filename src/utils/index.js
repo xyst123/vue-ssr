@@ -91,3 +91,7 @@ export function requestProxy({
     }
   });
 }
+
+export function getStatuses() {
+  return ['developer'];
+}

@@ -1,8 +1,7 @@
 import Vue from 'vue';
 import 'es6-promise/auto';
 import { createApp } from './app';
-import pageConfig from './config/page';
-import { base64ToUint8Array, request } from './utils';
+import { base64ToUint8Array, request, getStatuses } from './utils';
 
 Vue.mixin({
   beforeRouteUpdate(to, from, next) {
@@ -43,14 +42,26 @@ router.onReady(() => {
   app.$mount('#app');
 });
 
+router.beforeEach((to, from, next) => {
+  const statuses = getStatuses();
+  const { permissions } = to.meta || [];
+  if (!permissions.find(permission => statuses.includes(permission))) {
+    next({
+      path: '/main',
+    });
+  } else {
+    next();
+  }
+});
+
 router.afterEach((to) => {
-  const currentConfig = pageConfig[to.name] || {};
+  const currentConfig = to.meta || {};
 
   // 设置title
-  document.title = currentConfig.title || pageConfig.title;
+  document.title = currentConfig.title || '';
 
   // 设置b码
-  const bCode = currentConfig.bCode || pageConfig.bCode;
+  const bCode = currentConfig.bCode || '';
   const body = document.getElementsByTagName('body')[0];
   body.setAttribute('data-spm', bCode);
 

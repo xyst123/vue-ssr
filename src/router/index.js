@@ -8,8 +8,24 @@ export function createRouter() {
     fallback: false,
     scrollBehavior: () => ({ y: 0 }),
     routes: [
-      { path: '/main', name: 'Main', component: () => import('../views/Main.vue') },
-      { path: '/sub', name: 'Sub', component: () => import('../views/Sub.vue') },
+      {
+        path: '/main',
+        name: 'Main',
+        component: () => import('../views/Main.vue'), meta: {
+          title: 'main',
+          bCode: 'main'
+        }
+      },
+      {
+        path: '/sub',
+        name: 'Sub',
+        component: () => import('../views/Sub.vue'),
+        meta: {
+          title: 'sub',
+          bCode: 'sub',
+          permissions:['master'] 
+        },
+      },
       { path: '/', redirect: '/main' },
     ],
   });

@@ -1,6 +1,5 @@
 import { createApp } from './app';
-import pageConfig from './config/page';
-
+import { getStatuses } from './utils';
 // 会被bundleRenderer调用
 // 有可能是异步路由钩子函数或组件，所以返回一个Promise
 export default context => new Promise((resolve, reject) => {
@@ -16,9 +15,10 @@ export default context => new Promise((resolve, reject) => {
   router.push(url);
   router.onReady(() => {
     const matchedComponents = router.getMatchedComponents();
-
+    const statuses = getStatuses();
+    const { permissions } = router.currentRoute.meta || [];
     // 匹配不到的路由返回404
-    if (!matchedComponents.length) {
+    if (!matchedComponents.length || !permissions.find(permission => statuses.includes(permission))) {
       return reject({ code: 404 });
     }
 
@@ -34,13 +34,23 @@ export default context => new Promise((resolve, reject) => {
     }).catch(reject);
   }, reject);
 
+  router.beforeEach((to, from, next) => {
+    if (to.meta.disabled) {
+      next({
+        path: '/main',
+      });
+    } else {
+      next();
+    }
+  });
+
   router.afterEach((to) => {
-    const currentConfig = pageConfig[to.name] || {};
+    const currentConfig = to.meta || {};
 
     // 设置title
-    context.title = currentConfig.title || pageConfig.title;
+    context.title = currentConfig.title || '';
 
     // 设置b码
-    context.bCode = currentConfig.bCode || pageConfig.bCode;
+    context.bCode = currentConfig.bCode || '';
   });
 });

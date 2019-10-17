@@ -26,11 +26,11 @@ const serve = (sourcePath, cache) => express.static(resolve(sourcePath), {
   maxAge: cache && serverConfig.enableStaticCache ? 1000 * 60 * 60 * 24 * 30 : 0,
 });
 app.use(compression({ threshold: 0 }));
-app.use(favicon('./static/images/favicon.png'));
+app.use(favicon('./server/static/images/favicon.png'));
 app.use('/dist', serve('dist', true));
-app.use('/static', serve('static', true));
+app.use('/static', serve('server/static', true));
 app.use('/manifest.json', serve('manifest.json', true));
-app.use('/serviceWorker.js', serve('static/js/serviceWorker.js'));
+app.use('/serviceWorker.js', serve('server/static/js/serviceWorker.js'));
 
 // 使用代理接口
 if (!serverConfig.enableMock) {
@@ -60,7 +60,7 @@ function createRenderer(bundle, options) {
 // 渲染页面
 let renderer;
 let readyPromise;
-const templatePath = resolve('src/index.template.html');
+const templatePath = resolve('./server/views/index.template.html');
 if (env === 'dev') {
   readyPromise = require('./helpers/setup-dev-server')({
     app,
