@@ -1,5 +1,5 @@
 import { createApp } from './app';
-import { getStatuses } from './utils';
+import { getStatuses, get } from './utils';
 // 会被bundleRenderer调用
 // 有可能是异步路由钩子函数或组件，所以返回一个Promise
 export default context => new Promise((resolve, reject) => {
@@ -16,9 +16,9 @@ export default context => new Promise((resolve, reject) => {
   router.onReady(() => {
     const matchedComponents = router.getMatchedComponents();
     const statuses = getStatuses();
-    const { permissions } = router.currentRoute.meta || [];
+    const { permissions } = get(router, 'currentRoute.meta', {});
     // 匹配不到的路由返回404
-    if (!matchedComponents.length || !permissions.find(permission => statuses.includes(permission))) {
+    if (!matchedComponents.length || (permissions && !permissions.find(permission => statuses.includes(permission)))) {
       return reject({ code: 404 });
     }
 

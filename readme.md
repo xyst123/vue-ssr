@@ -1,17 +1,15 @@
 ## todo
 
 + 雪碧图
-+ ssr，csr互切
 + 单元测试
 + eventBus
 + jenkins
 + three.js
-+ 优化构建速度
 + 搭配脚手架使用
 + ssr原理
 + webpack插件
-+ ts
 + 缓存主文件
 + 字体图标
 + 防刷
-+ 样式happypack
++ 监控报警
++ 灰度发布

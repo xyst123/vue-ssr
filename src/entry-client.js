@@ -44,8 +44,8 @@ router.onReady(() => {
 
 router.beforeEach((to, from, next) => {
   const statuses = getStatuses();
-  const { permissions } = to.meta || [];
-  if (!permissions.find(permission => statuses.includes(permission))) {
+  const { permissions } = to.meta || {};
+  if (permissions && !permissions.find(permission => statuses.includes(permission))) {
     next({
       path: '/main',
     });

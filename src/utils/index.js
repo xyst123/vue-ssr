@@ -8,6 +8,33 @@ export function iterateObject(object, handler) {
   });
 }
 
+export function get(object, props, defaultValue) {
+  if (object) return defaultValue;
+  const temp = props.split('.');
+  const realProps = [].concat(temp);
+  temp.forEach((item) => {
+    const reg = /^(\w+)\[(\w+)\]$/;
+    if (reg.test(item)) {
+      const matches = item.match(reg);
+      const field1 = matches[1];
+      const field2 = matches[2];
+      const replaceIndex = realProps.indexOf(item);
+      realProps.splice(replaceIndex, 1, field1, field2);
+    }
+  });
+
+  return realProps.reduce((prevObject, prop) => {
+    const curObject = prevObject[prop] || defaultValue;
+    if (curObject instanceof Array) {
+      return [].concat(curObject);
+    }
+    if (curObject instanceof Object) {
+      return Object.assign({}, curObject);
+    }
+    return curObject;
+  }, object);
+}
+
 export function base64ToUint8Array(base64) {
   const padding = '='.repeat((4 - (base64.length % 4)) % 4);
   const realBase64 = (base64 + padding)
