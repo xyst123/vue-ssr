@@ -21,8 +21,10 @@ const baseConfig = {
     ],
     alias: {
       '@': resolve('src'),
-      static: resolve('static'),
     },
+  },
+  watchOptions: {
+    ignored: /node_modules/,
   },
   module: {
     // es6-promise库没有依赖其他包，无需解析
@@ -50,6 +52,7 @@ const baseConfig = {
         test: /\.(png|jpg|gif|svg)$/,
         use: ['happypack/loader?id=url'],
         include: [resolve('src/assets/images'), resolve('src/assets/fonts')],
+        exclude: /node_modules/,
       },
     ],
   },

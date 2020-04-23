@@ -26,6 +26,6 @@ module.exports = {
     },
   },
   other: {
-    extract: true,
+    extract: false,
   },
 };

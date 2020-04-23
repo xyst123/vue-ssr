@@ -2,7 +2,7 @@
   <div id="app">
     <h3 class="env" @click="log">当前环境：{{env}}</h3>
     <h3 class="status">当前状态：{{status}}</h3>
-    <button id="record-sync">同步</button>
+    <mp-button :round="true" id="record-sync">同步</mp-button>
     <transition name="fade" mode="out-in">
       <router-view />
     </transition>

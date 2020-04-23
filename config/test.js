@@ -25,6 +25,5 @@ module.exports = {
   },
   other: {
     extract: false,
-    userCSR: true,
   },
 };

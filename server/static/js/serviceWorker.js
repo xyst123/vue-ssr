@@ -6,9 +6,11 @@ const cacheFiles = [
   '/manifest.json',
   '/static/images/favicon.png',
   '/static/js/performance.js',
+  '/static/js/vendors.dll.js',
   'http://statics.itc.cn/spm/prod/js/1.0.1/index.js',
   'http://39d0825d09f05.cdn.sohucs.com/sdk/passport-4.0.6.js',
 ];
+
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(FileCacheName).then(cache => cache.addAll(cacheFiles)),

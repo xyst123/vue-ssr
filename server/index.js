@@ -15,11 +15,10 @@ const { createBundleRenderer } = require('vue-server-renderer');
 const serverInfo = `express/${require('express/package.json').version} `
   + `vue-server-renderer/${require('vue-server-renderer/package.json').version}`;
 require('./helpers/logger');
-const configs = require('../config');
-const { resolve, iterateObject } = require('../utils');
+const { resolve, getConfig, iterateObject } = require('../utils');
 
 const env = process.env.NODE_ENV || 'dev';
-const serverConfig = configs[env].server || {};
+const serverConfig = getConfig().server || {};
 const app = express();
 
 // 暴露资源
@@ -124,8 +123,8 @@ app.get('*', env === 'dev' ? (req, res) => {
   readyPromise.then(() => render(req, res));
 } : render);
 
-const { port } = serverConfig;
-if (serverConfig.protocol === 'https') {
+const { port, protocol } = serverConfig;
+if (protocol === 'https') {
   const httpsOptions = {
     key: fs.readFileSync(resolve('server.key')),
     cert: fs.readFileSync(resolve('server.crt')),

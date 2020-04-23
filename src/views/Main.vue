@@ -1,7 +1,11 @@
 <template>
   <div class="main">
-    <button @click="$router.push('/sub')">跳转</button>
-    <button @click="getImages">换一批图片</button>
+    <mp-button :round="true" @click="$router.push('/sub')">跳转</mp-button>
+    <mp-button :round="true" @click="getImages">换一批图片</mp-button>
+    <mp-image-upload
+      url="/upload"
+      image="http://5b0988e595225.cdn.sohucs.com/c_zoom,w_400/images/20190920/9846b5bc21ea42818387788cc509f1a5.jpeg"
+    />
     <ul class="image-list">
       <li class="image-item" v-for="image in images" :key="`${image.aid}`">
         <img :src="image.cover" alt />

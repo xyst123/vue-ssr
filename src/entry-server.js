@@ -1,5 +1,6 @@
 import { createApp } from './app';
 import { getStatuses, get } from './utils';
+
 // 会被bundleRenderer调用
 // 有可能是异步路由钩子函数或组件，所以返回一个Promise
 export default context => new Promise((resolve, reject) => {

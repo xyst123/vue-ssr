@@ -1,10 +1,13 @@
 import Vue from 'vue';
 import { sync } from 'vuex-router-sync';
+import MpUI from 'mp-ui';
 import App from './App.vue';
 import { createStore } from './store';
 import { createRouter } from './router';
 import errorPlugin from './plugins/error';
+import 'mp-ui/style/index.css';
 
+Vue.use(MpUI);
 Vue.use(errorPlugin);
 
 export function createApp() {

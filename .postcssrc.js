@@ -3,8 +3,8 @@ module.exports = {
   "plugins": {
     "autoprefixer": {},
     'postcss-px-to-viewport': {
-      viewportWidth: 750,
-      viewportHeight: 1334,
+      viewportWidth: 375,
+      viewportHeight: 667,
       unitPrecision: 3, // 保留小数位数
       viewportUnit: 'vw',
       selectorBlackList: ['.ignore', '.hairlines'], // 不转换为vw单位的类

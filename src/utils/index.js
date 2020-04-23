@@ -9,7 +9,7 @@ export function iterateObject(object, handler) {
 }
 
 export function get(object, props, defaultValue) {
-  if (object) return defaultValue;
+  if (!object) return defaultValue;
   const temp = props.split('.');
   const realProps = [].concat(temp);
   temp.forEach((item) => {
